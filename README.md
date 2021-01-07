@@ -3,7 +3,7 @@
 
 아무래도 {tidymodels}가 나온 지 오래된 패키지는 아니다 보니, 영어로 작성된 훌륭한 튜토리얼은 많았으나 한국어로 된 질 좋은 자료는 찾기 힘들었기 때문이다. 
 
-자세한 사항은 [여기] (https://be-favorite.github.io/Tutorial_tidymodels/Tutorial.html)를 참고해주세요.
+자세한 사항은 [여기](https://be-favorite.github.io/Tutorial_tidymodels/Tutorial.html)를 참고해주세요.
 
 <br>
 
