@@ -3,9 +3,10 @@
 
 <br>
 
-비록 해당 튜토리얼이 다른 글을 기반으로 참고하여 작성된 것이긴 하지만:sweat:, {tidymodels}을 배우길 원하는 한국 R 유저들에게 조금이나마 도움이 됐으면 좋겠다.:blush:
+비록 해당 튜토리얼이 다른 글을 기반으로 참고하여 작성된 것이긴 하지만:sweat:, {tidymodels}을 배우길 원하는 한국 R 유저들에게 조금이나마 도움이 됐으면 좋겠다.:blush: 해당 Repo를 다운로드하면 완벽히 재현가능하다.
 
 <div align=center>
 
+[![Tistory badge](https://img.shields.io/badge/Tistory-SLOG-orange)](https://be-favorite.tistory.com/)
 [![Linkedin Badge](https://img.shields.io/badge/-LinkedIn-blue?style=flat-square&logo=Linkedin&logoColor=white&link=https://www.linkedin.com/in/taemo-bang-8b9999184/)](https://www.linkedin.com/in/taemo-bang-8b9999184/) 
-[![Instagram Badge](https://img.shields.io/badge/-Instagram-dd2a7b?style=flat-square&logo=instagram&logoColor=white&link=https://www.instagram.com/qkdxoah/)](https://www.instagram.com/qkdxoah/) 
+[![Instagram Badge](https://img.shields.io/badge/-Instagram-dd2a7b?style=flat-square&logo=instagram&logoColor=white&link=https://www.instagram.com/qkdxoah/)](https://www.instagram.com/qkdxoah/)
