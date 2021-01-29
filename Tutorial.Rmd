@@ -1,30 +1,19 @@
 ---
 title: "<center> **<font size = 5>R 유저들을 위한 머신러닝 패키지 소개: {tidymodels} **</font> </center>"
-author: "<center> <font size = 3> 방태모 </font> </center>"
-date: "<center>`r Sys.Date()`</center>"
+author: "방태모"
+date: "`r Sys.Date()`"
 output: 
-  html_document:
-      toc: yes
-      toc_depth: 4
-      toc_float: yes
-      theme: sandstone
-      highlight: tango
+  rmdformats::robobook
 ---
-<center> If you are familiar with English, Here's the original text of the material:  </center>
-
-<center>[Tutorial on tidymodels for Machine Learning.](https://hansjoerg.me/2020/02/09/tidymodels-for-machine-learning/#updates) </center>
-
-<center> The following text was written with reference to the above link.</center>
-<center> and It's provided by the following Github repository: </center>
-<center>[be-favorite/Tutorial_tidymodels](https://github.com/be-favorite/Tutorial_tidymodels)</center>
-
-<br>
 
 <style>
 .math {
   font-size: small;
 }
 </style>
+
+## **0 Before start**
+If you are familiar with English, go to [4 Reference](#anchor). And this text is provided by [my Github repository](https://github.com/be-favorite/Tutorial_tidymodels)
 
 ## **1 Preparing**
 
@@ -33,6 +22,7 @@ output:
 
 ```{r}
 library(conflicted) # for conflict_prefer()
+library(rmdformats) # for the theme of html
 library(tidymodels)
 library(ggrepel) # for geom_label_repel()
 library(corrplot) # for corrplot()
@@ -44,7 +34,7 @@ ggplot2::theme_set(theme_light())
 `conflict_prefer("filter", "dplyr")`는 {dplyr}의 `filter()` 함수를 최우선으로 하기 위함이다.
 
 ### 1.2 데이터 불러오기
-본 튜토리얼에서 이용할 toy data`r emo::ji("video_game")`는 `diamonds{ggplot2}``r emo::ji("gem")`이다. 해당 데이터는 다이아몬드의 등급과 크기 및 가격에 관한 정보를 갖는다.
+본 튜토리얼에서 이용할 toy data는 `diamonds{ggplot2}``r emo::ji("gem")`이다. 해당 데이터는 다이아몬드의 등급과 크기 및 가격에 관한 정보를 갖는다.
 
 ```{r}
 data(diamonds)
@@ -385,5 +375,5 @@ sessioninfo::session_info()
 
 <br>
 
-## **4 Reference**
+## **4 Reference** {#anchor}
 * [Tutorial on tidymodels for Machine Learning](https://hansjoerg.me/2020/02/09/tidymodels-for-machine-learning/#updates)
