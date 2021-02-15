@@ -22,17 +22,13 @@ If you are familiar with English, go to [4 Reference](#anchor). And this text is
 {tidymodels}는 모델링에 필요한 패키지들의 묶음이라고 보면 된다. {tidyverse}처럼 {tidymodels}을 로딩하면 모델링에 필요한 여러 가지 패키지들을 불러온다. 그중에는 {ggplot2}와 {dplyr} 같은 {tidyverse}에 포함되는 패키지들도 있다.
 
 ```{r}
-library(conflicted) # for conflict_prefer()
 library(rmdformats) # for the theme of html
 library(tidymodels)
 library(ggrepel) # for geom_label_repel()
 library(corrplot) # for corrplot()
 
-conflict_prefer("filter", "dplyr")
 ggplot2::theme_set(theme_light())
 ```
-
-`conflict_prefer("filter", "dplyr")`는 {dplyr}의 `filter()` 함수를 최우선으로 하기 위함이다.
 
 ### 1.2 데이터 불러오기
 본 튜토리얼에서 이용할 toy data는 `diamonds{ggplot2}``r emo::ji("gem")`이다. 해당 데이터는 다이아몬드의 등급과 크기 및 가격에 관한 정보를 갖는다.
@@ -110,9 +106,9 @@ glimpse(
 ```
 
 ### 2.3 모형 정의 및 적합: {parsnip}
-이제 훈련 자료에 대한 기본적인 전처리가 끝났으므로, {parsnip}을 이용하여 모형을 정의하고 적합할 것이다. {parsnip}은 우리나라 말로 연한 노란색의 긴 뿌리채소를 뜻하는데, 이 패키지는 왜 이렇게 이름이 지어진 지 잘 모르겠다. 영어권의 원어민들은 어떻게 생각할지 궁금하다. {parsnip}은 유저들로부터 인기 있는 수많은 머신러닝 알고리즘(see, [For a list of models available via parsnip](https://tidymodels.github.io/parsnip/articles/articles/Models.html))을 제공하며, 최대 장점은 단일화된 인터페이스로 여러 모형을 적합할 수 있다는 점이다. 예를 들어, 랜덤포레스트 모형의 적합을 제공하는 두 패키지 {ranger}와 {randomForest}에는 고려할 트리의 개수를 지정할 수 있는 모수가 존재하는데 해당 옵션의 이름이 각각 `ntree`, `num.trees`로 다르다. {parsnip}은 이러한 갈등을 해결해줌으로써, 쓸데없이 두 인터페이스를 기억할 필요가 없게끔 해준다. 참 친절한 패키지다. 사용자에 대한 이러한 사소한 배려 때문에 {tidymodels} 패키지를 소개할 때 user-friendly와 같은 말을 꼭 빼먹지 않고 언급하게 된다.`r emo::ji("grinning")`
+이제 훈련 자료에 대한 기본적인 전처리가 끝났으므로, {parsnip}을 이용하여 모형을 정의하고 적합할 것이다. {parsnip}은 우리나라 말로 연한 노란색의 긴 뿌리채소를 뜻하는데, 이 패키지는 왜 이렇게 이름이 지어진 지 잘 모르겠다. 영어권의 원어민들은 어떻게 생각할지 궁금하다. {parsnip}은 유저들로부터 인기 있는 수많은 머신러닝 알고리즘(see, [For a list of models available via parsnip](https://tidymodels.github.io/parsnip/articles/articles/Models.html))을 제공하며, 최대 장점은 단일화된 인터페이스로 여러 모형을 적합할 수 있다는 점이다. 예를 들어, 랜덤포레스트 모형의 적합을 제공하는 두 패키지 {ranger}와 {randomForest}에는 고려할 트리의 개수를 지정할 수 있는 모수가 존재하는데 해당 옵션의 이름이 각각 `ntree`, `num.trees`로 다르다. {parsnip}은 이러한 갈등을 해결해줌으로써, 쓸데없이 두 인터페이스를 기억할 필요가 없게끔 해준다.
 
-{parsnip}에서는 먼저 특정 함수를 통해 모형을 정의하고(e.g. `linear_reg()`, `rand_forest()`), `set_mode()`로 어떤 문제(i.e. 회귀, 분류)를 해결할 것인지 설정한 뒤에, `set_engine()`으로 원하는 알고리즘을 명시한다(e.g. 선형 회귀, 랜덤포레스트 등). 그리고, 마지막 절차로 어떤 system 또는 패키지를 이용하여 해당 모형을 적합할지를 `set_engine()`으로 설정한다. 여기서는 먼저 `stats::lm()`을 이용하여 기본적인 회귀모형으로 적합을 시작할 것이다.
+{parsnip}에서는 먼저 특정 함수를 통해 모형을 정의하고(e.g. `linear_reg()`, `rand_forest()`), `set_mode()`로 어떤 문제(i.e. 회귀, 분류)를 해결할 것인지 설정한 뒤에, 마지막 절차로 어떤 system 또는 패키지를 이용하여 해당 모형을 적합할지를 `set_engine()`으로 설정한다. 여기서는 먼저 `stats::lm()`을 이용하여 기본적인 회귀모형으로 적합을 시작할 것이다.
 
 ```{r}
 lm_model <- linear_reg() %>% 
@@ -139,18 +135,18 @@ lm_fit1
 ### 2.4 적합된 모형 요약: {broom}
 R의 여러 모형 객체들의 요약은 `summary()` 또는 `coef()`와 같은 함수로 이루어진다. 그러나, 이러한 함수들의 출력물은 tidy한 포맷(i.e. 행이 관측치, 열이 변수)으로 주어지지 않는다. tidy한 포맷을 분석에 사용하는 자료를 예로 들어 말하면, 일반적으로는 행이 관측치 열이 변수인 포맷을 말한다(다만, tidy한 형식이 데이터를 다루는 것에 있어서 항상 정답은 아닐 수 있음). {broom} 패키지는 적합 된 모형의 요약을 tidy한 포맷으로 제공해준다(broom은 빗자루와 같은 브러쉬를 의미하는 명사인데, 적합한 모형을 깨끗하게 쓸어 담는 패키지라고 생각하면 편할 것 같다). 이와 같은 일관성은 {tidyverse}, {tidymodels}에 포함되는 패키지들의 공통된 좋은 특징이라 할 수 있다. 이 자리를 빌려 {tidyverse}를 시작으로 R이라는 언어를 한층, 아니 두 층 세 층 이상 업그레이드 시켜준 Hadley Wickham에게 경의를 표한다.`r emo::ji("raised_hands")`
 
-{broom} 패키지를 구성하는 첫 번째 함수로 `glance()`를 소개한다. glance라는 동사가 우리나라 말로 힐끗 본다는 말을 갖는다는 점에서 추측할 수 있듯이, `glance()`는 적합된 모형의 전체적인 정보를 간략히 제공해준다. 이런 것을 보면 함수 이름을 지을 때 개발자가 얼마나 심사숙고했는지를 알 수 있고, R에서 함수 이름을 신중하게 정하는 것은 결코 시간을 낭비하는 행위가 아니라 코드의 가독성을 높여줄 수 있는 좋은 습관임을 한 번 더 깨달을 수 있다. 참 애정이 가는 패키지다.`r emo::ji("yum")`
+{broom} 패키지를 구성하는 첫 번째 함수로 `glance()`를 소개한다. glance라는 동사가 우리나라 말로 힐끗 본다는 뜻을 갖는다는 점에서 추측할 수 있듯이, `glance()`는 적합된 모형의 전체적인 정보를 간략히 제공해준다. 이런 것을 보면 함수 이름을 지을 때 개발자가 얼마나 심사숙고했는지를 알 수 있고, R에서 함수 이름을 신중하게 정하는 것은 결코 시간을 낭비하는 행위가 아니라 코드의 가독성을 높여줄 수 있는 좋은 습관임을 한 번 더 깨달을 수 있다.
 ```{r, cache = TRUE}
 knitr::kable(glance(lm_fit1$fit), "simple")
 ```
 
-`knitr::kable()`은 HTML에서 출력을 이쁘게 만들어주기 위한 함수이므로 무시해도 된다. 적합된 모형의 수정된 $R^2$ 값은 98.2%로 상당히 설명력을 자랑한다. 또한, RMSE는 해당 결과의 sigma를 통해 확인할 수 있으며, 0.132 값을 갖는다. 다음으로 `tidy()`는 추정된 모수에 대한 정보를 제공한다. 다음의 결과에서 우리는 carat의 2차 효과가 유의하게 존재함을 알 수 있다. 통계량의 크기를 기준으로 내림차순으로 정렬하여 표시하였다.
+`knitr::kable()`은 HTML에서 출력을 이쁘게 만들어주기 위한 함수이므로 무시해도 된다. 적합된 모형의 수정된 $R^2$ 값(`adj.r.squared`)은 약 98.27%로 상당히 설명력을 자랑한다. 또한, RMSE는 해당 결과의 `sigma` 열에서 확인할 수 있으며, 0.132 값을 갖는다. 다음으로 `tidy()`는 추정된 모수에 대한 정보를 제공한다. 다음의 결과에서 우리는 carat의 2차 효과가 유의하게 존재함을 알 수 있다. 통계량의 크기를 기준으로 내림차순으로 정렬하여 표시하였다.
 
 ```{r, cache = TRUE}
 tidy(lm_fit1) %>% 
     arrange(desc(abs(statistic)))
 ```
-마지막으로 `augment()`를 통해 모형의 예측값, 적합값 등을 반환해준다. augment는 우리나라 말로 어떤 것의 양 또는 값, 크기 등을 늘리는 것(to increase the amount, value, size, etc. of something)을 뜻하는 동사로, 해당 함수도 이름을 통해 어느정도 그 역할을 가늠할 수 있다.
+마지막으로 `augment()`는 모형의 예측값, 적합값 등을 반환해준다. augment는 우리나라 말로 어떤 것의 양 또는 값, 크기 등을 늘리는 것(to increase the amount, value, size, etc. of something)을 뜻하는 동사로, 해당 함수도 이름을 통해 어느정도 그 역할을 가늠할 수 있다.
 
 ```{r}
 lm_predicted <- augment(lm_fit1$fit, data = dia_juiced) %>% 
@@ -167,7 +163,7 @@ ggplot(lm_predicted, aes(.fitted, price)) +
        y = "observed values")
 ```
 
-원자료의 각 행을 의미하는 두 단어 관측값(observed values)과 실제값(actual values)은 통용되니 어떤 용어를 써도 문제가 없다. 특히, 머신러닝에서는 이를 데이터 포인트(data point)라고 표현하기도 한다. 3가지 용어 모두 통용되는 말이니 몰랐다면 알아두자. 모든 학문에서 그렇겠지만 통계학에서는 특히 정확한 용어 정의가 중요하므로, 비슷한 용어 또는 비슷한 듯 다른 용어들이 있다면 틈틈이 정리하는 습관을 꼭 갖도록 하자.
+원자료의 각 행을 의미하는 두 단어 관측값(observed values)과 실제값(actual values)은 통용되니 어떤 용어를 써도 문제가 없다. 특히, 머신러닝에서는 이를 데이터 포인트(data point)라고 표현하기도 한다. 3가지 용어 모두 통용되는 말이니 몰랐다면 알아두자. 모든 학문에서 그렇겠지만 통계학에서는 특히 정확한 용어 정의가 중요하므로, 비슷한 용어 또는 비슷한 듯 다른 용어들이 있다면 틈틈이 정리하는 습관을 갖도록 하자.
 
 ### 2.5 모형 성능 평가: {yardstick}
 위에서 `glance()`를 통해 적합된 모형의 성능을 RMSE, $R^2$를 통해 힐끗 확인할 수 있었다. {yardstick}은 모형의 성능에 대한 여러 측도를 계산하기 위한 패키지이다. 물론, $y$가 연속형이든 범주형이든 문제없으며 교차 검증에서 생산되는 그룹화된 예측값들과도 매끄럽게 작동한다. yardstick은 기준, 척도를 뜻하는 명사에 해당하므로, 기억하기도 쉬울 것이라 생각한다. 이제는 {rsample}, {parsnip}, {yardstick}으로 교차 검증(Cross Validation, CV)을 수행하여 좀 더 정확한 RMSE를 추정해보자.
@@ -209,7 +205,7 @@ lm_fit3 <- lm_fit2 %>%
 select(lm_fit3, id, recipe:model_pred)
 ```
 
-위 과정에서 확인했다시피, 단 하나의 티블 객체 `lm_fit2`에서 이루어졌다. 이렇게 복잡한 작업이 단 하나의 티블 객체만으로 이루어질 수 있었던 이유는 티블은 리스트-열(list-column)을 가질 수 있기 때문이다. 덕분에 우리는 R에서는 연산이 느린 반복문(e.g. `for()`, `while()`)을 사용하지 않고 `purrr::map()`을 loop로 이용하여 반복문을 통한 지루하고 느린 모델링 작업을 완벽한 함수형 프로그래밍으로 수행할 수 있게 되었다. R 사용자라면 어디서 한번 쯤은 반복문의 사용은 지양하고, 함수형 프로그래밍을 해야 한다고 들어봤을 것이다. {tidymodels}이 모델링 과정을 {tidyverse}와 함께 작동할 수 있게 해줌으로써, 한 자료에 대해서 여러 가지 모형의 적합, 교차검증을 통한 모수 튜닝, 예측 성능평가 등의 작업을 통해 경험적으로(empirically) 최적의 모형을 선택하는 수고가 필요한 머신러닝에 드는 시간을 상당히 줄여줬다고 할 수 있다.`r emo::ji("sob")` 이쯤 되면 내가 왜 이렇게 {tidyverse}를 좋아하고, 그리고 이렇게 {tidymodels}의 튜토리얼에 대해 상세하게 기술하는지 이해할 것이다. R 유저임에도 불구하고, 아직 {tidyverse}를 다루지 못한다면 정말 반성해야 한다. 특히, {tidyverse}라는 패키지의 존재도 모른 채로 반복문을 이용한 코딩을 수행하면서 R은 느린 언어라고 불평하고 다니는 사람들은 더욱더 반성해야 한다. `r emo::ji("triumph")` 
+위 과정에서 확인했다시피, 모든 과정이 단 하나의 티블 객체 `lm_fit2`에서 이루어졌다. 이렇게 복잡한 작업이 단 하나의 티블 객체만으로 이루어질 수 있었던 이유는 티블은 리스트-열(list-column)을 가질 수 있기 때문이다. 덕분에 우리는 R에서는 연산이 느린 반복문(e.g. `for()`, `while()`)을 사용하지 않고 `purrr::map()`을 loop로 이용하여 반복문을 통한 지루하고 느린 모델링 작업을 완벽한 함수형 프로그래밍으로 수행할 수 있게 되었다. R 사용자라면 어디서 한번 쯤은 반복문의 사용은 지양하고, 함수형 프로그래밍을 해야 한다고 들어봤을 것이다. {tidymodels}이 모델링 과정을 {tidyverse}와 함께 작동할 수 있게 해줌으로써, 한 자료에 대해서 여러 가지 모형의 적합, 교차검증을 통한 모수 튜닝, 예측 성능평가 등의 작업을 통해 경험적으로(empirically) 최적의 모형을 선택하는 수고가 필요한 머신러닝에 드는 시간을 상당히 줄여줬다고 할 수 있다.`r emo::ji("sob")` 이쯤 되면 내가 왜 이렇게 {tidyverse}를 좋아하고, 그리고 이렇게 {tidymodels}의 튜토리얼에 대해 상세하게 기술하는지 이해할 것이다. R 유저임에도 불구하고, 아직 {tidyverse}를 다루지 못한다면 정말 반성해야 한다. 특히, {tidyverse}라는 패키지의 존재도 모른 채로 반복문을 이용한 코딩을 수행하면서 R은 느린 언어라고 불평하고 다니는 사람들은 더욱더 반성해야 한다. `r emo::ji("triumph")` 
 이제 평가용 자료로부터 실제 관측값(`price`)을 추출하여 예측값(`.pred`)과 비교한 뒤, `yardstick::metrics()`를 이용해 여러 평가 측도를 계산한다.
 ```{r}
 lm_preds <- lm_fit3 %>% 
@@ -249,7 +245,7 @@ parameters(rf_model)
 mtry()
 ```
 
-즉, 아직 랜덤포레스트 모형의 적합에 관장하는 모수 값을 결정하지 않았으므로 모형을 훈련 자료에 적합할 준비가 된 상태가 아니라고 할 수 있다. 그리고, `mtry`의 최댓값은 `update()`를 사용해 원하는 값을 명시할 수도 있고, 또는 `finalize()`를 사용해 해당 자료가 갖는 예측변수의 수로 지정할 수도 있다.
+즉, 아직 랜덤포레스트 모형의 적합에 쓰이는 모수 값을 결정하지 않았으므로 모형을 훈련 자료에 적합할 준비가 된 상태가 아니라고 할 수 있다. 그리고, `mtry`의 최댓값은 `update()`를 사용해 원하는 값을 명시할 수도 있고, 또는 `finalize()`를 사용해 해당 자료가 갖는 예측변수의 수로 지정할 수도 있다.
 ```{r}
 rf_model %>% 
   parameters() %>% 
@@ -367,7 +363,7 @@ metrics(dia_test, truth = logprice, estimate = .pred)
 ***
 {tidymodels}의 ecosystem은 머신러닝 문제를 풀기 위해 처음부터 끝까지 함께(hand in hand) 작동하는 패키지들의 집합을 한대 묶는다. 또한, {tidyverse}을 통한 data-wrangling 기능과 우수한 시각화 패키지 {ggplot2}와도 함께 작동하는 {tidymodels}은 R을 사용하는 데이터 사이언티스트(data scientist)들에게는 더없이 풍부한 toolbox라 할 수 있다.
 
-아울러, 해당 튜토리얼에서 다른 여러 머신러닝 모형들을 결합해주는(i.e., ensemble, stacking, super learner) 기능을 갖는 패키지 {stacks}에 대한 내용을 다루지 않았는데, 관심이 있는 사람들은 다뤄보길 바란다((see [here](https://stacks.tidymodels.org/articles/basics.html))). {tidymodels}을 불러올 때 로딩이 되는 패키지는 아니지만, {stacks} 또한 part of {tidymodels}로 소개되는 패키지이다. 이로써 {tidymodels}은 {caret}을 완벽하게 대체한다. 물론, {stacks}에 관한 내용이 포함되어 있지 않은 이 튜토리얼만 step by step으로 따라 하고 잘 이해한다면, 실무에서 머신러닝이 필요한 경우에 크게 무리가 없을 것으로 생각한다.
+아울러, 해당 튜토리얼에서 다른 여러 머신러닝 모형들을 결합해주는(i.e., ensemble, stacking, super learner) 기능을 갖는 패키지 {stacks}에 대한 내용을 다루지 않았는데, 관심이 있는 사람들은 다뤄보길 바란다(see [here](https://stacks.tidymodels.org/articles/basics.html)). {tidymodels}을 불러올 때 로딩이 되는 패키지는 아니지만, {stacks} 또한 part of {tidymodels}로 소개되는 패키지이다. 이로써 {tidymodels}은 {caret}을 완벽하게 대체한다. 물론, {stacks}에 관한 내용이 포함되어 있지 않은 이 튜토리얼만 step by step으로 따라 하고 잘 이해한다면, 실무에서 머신러닝이 필요한 경우에 크게 무리가 없을 것으로 생각한다.
 
 {tidymodels}을 배우길 원하는 한국 R 유저들에게 조금이나마 도움이 됐으면 좋겠다.`r emo::ji("blush")` 마지막으로 이 튜토리얼을 진행하는 데 쓰인 컴퓨터 session에 대한 정보를 제공하는 것을 끝으로 이 글을 마무리한다.
 
