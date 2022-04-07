@@ -1,3 +1,3 @@
 # R 유저들을 위한 머신러닝 패키지 소개: {tidymodels}
 
-* {tidymodels} 튜토리얼: https://www.taemobang.com/posts/2022-04-04-tidyvese-principle/
+- [Tutorials with R](https://www.taemobang.com/posts/2022-04-04-tidyvese-principle/)
